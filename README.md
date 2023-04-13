@@ -29,6 +29,12 @@ Three rods and n discs make up the Tower of Hanoi, a mathematical puzzle. The ai
 	Step 6 - Move n-1 disks from Aux to Destination.
 	Step 7 - Repeat Steps 3 to 5, by decrementing n by 1.
 	Step 8 - Stop
+	
+## Running the code on Ubuntu
+1. Open the terminal and navigate to the directory (folder) containing the .cpp file (using the cd command).
+2. Compile the code using the command `g++ tower.cpp`
+3. Now execute the program using the command `./a.out tower.cpp`
+
 
 ## Output Screenshots
 ![TowerOfHanoi_1](https://user-images.githubusercontent.com/81312909/231516270-ed5b4f75-e258-47f5-a6fc-14bdb0fa2cb4.png)
