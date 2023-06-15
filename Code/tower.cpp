@@ -5,38 +5,57 @@
 #include<stdlib.h>
 #include<string.h>
 #include<unistd.h>
+
+// Array to store the positions of the disks
 int pos[16] = {10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85};
+
+// Array to store the positions of the pegs
 int peg[3] = {50,150,250};
+
+// Array to store the moves made during the Tower of Hanoi solution
 int moves[10000][3];
+
+// Maximum number of moves allowed
 int max_moves;
+
+// 2D array representing the poles and the disks on them
 int POLES[3][10];
+
+// Array to keep track of the top disk on each pole
 int top[3]={-1,-1,-1};
-int NUM_DISKS=3;
+int NUM_DISKS=3; // Total number of disks
+
+// Variables for counting and animation
 int cnt,counter;
 int line1=90,line2=85;
 float ycoordinate;
+
+// Flags for light and animation
 int lightflag=1,animationFlag=1;
 
+// Function to push a disk onto a pole
 void push(int p,int disk)
 {
 	POLES[p][++top[p]] = disk;
 }
 
+// Function to pop a disk from a pole
 void pop(int p)
 {
 	top[p]--;
 }
 
+// Recursive function to solve the Tower of Hanoi problem
 void tower(int n,int src,int temp,int dst)
 {
 	if(n>0)
 	{
-		tower(n-1,src,dst,temp);
-		moves[cnt][0] = n;
-		moves[cnt][1] = src;
-		moves[cnt][2] = dst;
-		cnt++;
-		tower(n-1,temp,src,dst);
+		tower(n-1,src,dst,temp); // Move n-1 disks from source to temporary peg
+		moves[cnt][0] = n; // Store the current move in the moves array
+		moves[cnt][1] = src; // Store the source peg index for the current move
+		moves[cnt][2] = dst; // Store the destination peg index for the current move
+		cnt++; // Increment the move count
+		tower(n-1,temp,src,dst); // Move n-1 disks from the temporary peg to the destination peg
 	}
 }
 void drawcylinder()
