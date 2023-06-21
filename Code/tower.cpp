@@ -58,73 +58,121 @@ void tower(int n,int src,int temp,int dst)
 		tower(n-1,temp,src,dst); // Move n-1 disks from the temporary peg to the destination peg
 	}
 }
+
+// Function to draw a cylinder
 void drawcylinder()
 {
+	// Create a new quadric object
 	GLUquadricObj *q;
 	q = gluNewQuadric();
+
+	// Draw the cylinder using gluCylinder function
+	// Parameters: (quad, base radius, top radius, height, slices, stacks)
 	gluCylinder(q, 2, 2, 60, 60, 20);	
 }
 
+// Function to draw the pegs
 void drawPegs()
 {
 	int i;
 	glColor3f(0,0,0);
+
+	// Iterate over each peg
 	for(i=0;i<3;i++)
 	{
 		glPushMatrix();
 		glTranslatef(peg[i],5,0);
 		glRotatef(-90,1,0,0);
-		drawcylinder();
+		drawcylinder(); // Draw the cylinder for the peg using the drawcylinder function
+		// Draw the torus shape on top of the peg using glutSolidTorus function
+		// Parameters: (inner radius, outer radius, sides, rings)
 		glutSolidTorus(2,45, 20, 20);
 		glPopMatrix();
 	}	
 }
 
+// Function to print a string using GLUT bitmap fonts (Helvetica 18)
 void printString(char *text)
 {
-	int len=strlen(text),i;
+	int len=strlen(text),I;
+	// Iterate over each character in the string and print it using glutBitmapCharacter function
 	for(i=0;i<len;i++)
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,text[i]);
 }
+
+// Function to print a string using GLUT bitmap fonts (Times Roman 24)
 void printS(char *text)
 {
-	int len=strlen(text),i;
+	int len=strlen(text),I;
+	// Iterate over each character in the string and print it using glutBitmapCharacter function
 	for(i=0;i<len;i++)
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,text[i]);
 }
 
+// Function to draw the text on the screen
 void drawText()
 {
+	// Set the text color to black
 	glColor3f(0,0,0);
+
+	// Draw "Move :" text
 	glRasterPos3f(-70,line1,0);
-	printString("Move :");
-	char str[5];
+	printString("Move :"); 
+
+	// Convert the counter variable to a string and print it
+	char str[5]; 
 	sprintf(str, "%d", counter);
+
+	// Draw the counter value
 	glRasterPos3f(-40,line1,0);
 	printString(str);
+
+	// Draw "Disk" text
 	glRasterPos3f(-70,line2,0);
 	printString("Disk");
+
+	// Convert the disk number to a string
 	char str1[10];
 	sprintf(str1, "%d", moves[counter][0]);
+
+	// Draw the disk number
 	glRasterPos3f(-50,line2,0);
 	printString(str1);
+
+	// Draw "from" text
 	glRasterPos3f(-40,line2,0);
 	printString("from");
+
+	// Determine the source peg (A, B, or C) and draw it
 	char src[2];
-	if(moves[counter][1]==0)strcpy(src,"A");
-	else if(moves[counter][1]==1)strcpy(src,"B");
-	else strcpy(src,"C");
+	if(moves[counter][1]==0)
+		strcpy(src,"A");
+	else if(moves[counter][1]==1)
+		strcpy(src,"B");
+	else 
+		strcpy(src,"C");
 	glRasterPos3f(-20,line2,0);
 	printString(src);
+
+	// Draw "to" text
 	glRasterPos3f(-10,line2,0);
 	printString("to");
+
+	// Determine the destination peg (A, B, or C) and draw it
 	char dst[2];
-	if(moves[counter][2]==0)strcpy(dst,"A");
-	else if(moves[counter][2]==1)strcpy(dst,"B");
-	else strcpy(dst,"C");
+	if(moves[counter][2]==0)
+		strcpy(dst,"A");
+	else if(moves[counter][2]==1)
+		strcpy(dst,"B");
+	else 
+		strcpy(dst,"C");
 	glRasterPos3f(0,line2,0);
 	printString(dst);
+
+	// Set the color to blue
 	glColor3f(0,0,1);
+
+	// Draw peg labels A, B, and C
 	glRasterPos3f(peg[0],70,0);
 	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,'A');
 	glRasterPos3f(peg[1],70,0);
@@ -132,59 +180,105 @@ void drawText()
 	glRasterPos3f(peg[2],70,0);
 	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,'C');
 }
+
+// Function to display the name
 void displayName(){
+	// Set the text color to red
 	glColor3f(1,0,0);
+	/ Set the position to display the name
 	glRasterPos3f(40,line1,0);
-	//printS("2JR18CS078 \n2JR18CS079");
+	//printS("2JR18CS078 \n2JR18CS079");  //Prints our USN. Commented because not in use for now.
 }
+
+// Function to draw a "Solved" message or prompt to select the number of disks
 void drawSolved()
 {	
+	// Set the color to blue
 	glColor3f(0,0,1);
+
+	// Draw peg labels A, B, and C
 	glRasterPos3f(peg[0],70,0);
 	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,'A');
 	glRasterPos3f(peg[1],70,0);
 	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,'B');
 	glRasterPos3f(peg[2],70,0);
 	glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,'C');
+
+	// Set the color to blue
 	glColor3f(0,0,1);
+
+	// Set the position to display the message
 	glRasterPos3f(-60,77,0);
-	if(moves[0][0]==0){
-	printString("Select the number of disks");
-	displayName();
+
+	// Check if the first move is 0 to determine if the number of disks needs to be selected
+	if(moves[0][0]==0)
+	{
+		// Print the prompt to select the number of disks
+		printString("Select the number of disks");
+		// Display the name
+		displayName();
 	}
-	else {
-	printString("Solved !!");}
+	else 
+	{	
+		// Print "Solved !!" message
+		printString("Solved !!");
+	}
+	// Display the name	
 	displayName();
 }
 
+// Display function for OpenGL rendering
 void display()
 {
 	int i,j,k;
+
+	// Display the name
 	displayName();
+
+	// Clear the color and depth buffers
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);	
 	glPushMatrix();
+
+	// Set the camera position
 	gluLookAt(0,ycoordinate,0,0,0,-1,0,1,0);
+
+	// Draw the pegs
 	drawPegs();
+
+	// Iterate over each pole
 	for(i=0;i<3;i++)
 	{
 		k=0;
+		// Iterate over each disk on the pole
 		for(j=0;j<=top[i];j++)
 		{
 			glPushMatrix();
 			glTranslatef(peg[i],pos[k++],0);
 			glRotatef(90,1,0,0);
+
+			// Set the color of the disk based on its value
 			glColor3f(0.1*POLES[i][j],0.2*POLES[i][j],2);
+
+			// Draw the disk using glutSolidTorus function
+			// Parameters: (inner radius, outer radius, sides, rings)
 			glutSolidTorus(2, 6*POLES[i][j], 20, 20);
 			glPopMatrix();
 		}
 	}	
 	glPopMatrix();
+
+	// Disable lighting for the following text and messages
 	glDisable(GL_LIGHTING);	
+
+	// Check if the current move counter is equal to the maximum allowed moves
 	if(counter==max_moves)
-		drawSolved();
+		drawSolved(); // Draw "Solved" message
 	else
-		drawText();
-	if(lightflag)glEnable(GL_LIGHTING);
+		drawText(); // Draw the current move details
+	
+	// Enable lighting again
+	if(lightflag)
+		glEnable(GL_LIGHTING);
 	glutSwapBuffers();
 }
 
