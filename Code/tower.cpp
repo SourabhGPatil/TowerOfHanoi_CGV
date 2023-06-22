@@ -94,7 +94,7 @@ void drawPegs()
 // Function to print a string using GLUT bitmap fonts (Helvetica 18)
 void printString(char *text)
 {
-	int len=strlen(text),I;
+	int len=strlen(text),i;
 	// Iterate over each character in the string and print it using glutBitmapCharacter function
 	for(i=0;i<len;i++)
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,text[i]);
@@ -103,7 +103,7 @@ void printString(char *text)
 // Function to print a string using GLUT bitmap fonts (Times Roman 24)
 void printS(char *text)
 {
-	int len=strlen(text),I;
+	int len=strlen(text),i;
 	// Iterate over each character in the string and print it using glutBitmapCharacter function
 	for(i=0;i<len;i++)
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,text[i]);
