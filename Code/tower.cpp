@@ -282,116 +282,178 @@ void display()
 	glutSwapBuffers();
 }
 
+
+// Function to set up lighting for the scene
 void lighting()
 {
+	// Set the shininess value for materials
 	GLfloat shininess[] = {50};
+
+	// Set the color for ambient and diffuse lighting
 	GLfloat white[] = {0.6,0.6,0.6,1};
+
+	// Enable color material and set material properties
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
+
+	// Set the ambient light properties
 	GLfloat light_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+
+	// Set the light position
 	GLfloat light_position[] = {100,60, 10, 0.0 };
+
+	// Set the ambient light and light position
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+	// Set the diffuse and specular material properties
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, white);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+
+	// Set the shininess of the material
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+
+	// Enable light 0
 	glEnable(GL_LIGHT0);
 }
 
+
+// Initialization function
 void init()
-{	glClearColor(1.0,1.0,1.0,0);
+{	
+	// Set the clear color
+	glClearColor(1.0,1.0,1.0,0);
+
+	// Set the projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+
+	// Set the orthographic projection
 	glOrtho(-80,350,-10,100,-100,100);
+
+	// Set the modelview matrix
 	glMatrixMode(GL_MODELVIEW);
+
+	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
+
+	// Set up lighting
 	lighting();
 }
 
+// Mouse function to handle button clicks
 void mouse(int btn,int mode,int x,int y)
 {
+	// Check if the scroll wheel is scrolled up
 	if(btn == 4 && mode == GLUT_DOWN)
 	{
+		// Check if the counter is less than the maximum allowed moves
 		if(counter<max_moves)
 		{
+			// Move the disk from the source peg to the destination peg
 			pop(moves[counter][1]);
 			
 			push(moves[counter][2],moves[counter][0]);
 			counter++;
 		}
 	}
+
+	// Check if the scroll wheel is scrolled down
 	if(btn == 3 && mode == GLUT_DOWN)
 	{
+		// Check if the counter is greater than 0
 		if(counter>0)
 		{
+			// Move the disk from the destination peg back to the source peg
 			counter--;
 			pop(moves[counter][2]);
-			
 			push(moves[counter][1],moves[counter][0]);
 		}
 	}
 	glutPostRedisplay();
 }
 
+// Function to restart the game
 void restart()
 {
 	int i;
+
+	// Reset the pole, move, and top arrays
 	memset(POLES,0,sizeof(POLES));
 	memset(moves,0,sizeof(POLES));
 	memset(top,-1,sizeof(top));
 	cnt=0,counter=0;
 	ycoordinate=0.1;
+
+	// Calculate the maximum allowed moves based on the number of disks
 	max_moves = pow(2,NUM_DISKS)-1;
+
+	// Push the disks onto the source peg
 	for(i=NUM_DISKS;i>0;i--)
 	{
 		push(0,i);
 	}
+
+	// Generate the moves to solve the game
 	tower(NUM_DISKS,0,1,2);
 }
 
+// Function to handle main menu option selection (unused for now)
 void processMenuMain2(int option)
 {
 	
 }
 
+// Function to handle the restart menu option
 void processMenuRestart(int option)
 {
+	// Check if the option selected is 0 (Yes)
 	if(option==0)
 	{
+		// Restart the game and redraw the scene
 		restart();
 		glutPostRedisplay();
 	}
 }
 
+// Function to handle the exit menu option
 void processMenuExit(int option)
 {
-	if(option==0)exit(0);
+	// Check if the option selected is 0 (Yes)
+	if(option==0)
+		exit(0); // Exit the program
 }
 
+// Function to solve the game completely
 void processMenuSolveCompletely(int option)
 {
+	// Store the current animation flag value
 	int temp=animationFlag;
+
+	// Disable animation for faster solving
 	animationFlag=0;
+	
 	int i,j;
+
+	// Perform moves until the game is completely solved
 	while(counter<max_moves)
 	{
 		mouse(4,GLUT_DOWN,0,0);
 		display();
+
+		// Add delay to visualize the solving process
 		for(i=0;i<1000000;i++)
 			for(j=0;j<100;j++);
 	}
+	
+	// Restore the original animation flag value
 	animationFlag=temp;
 }
 
-void processMenuNumDisks(int option)
-{
-	NUM_DISKS=option;
-	restart();
-	glutPostRedisplay();
-}
-
+// Function to create GLUT menus for the game
 void createGLUTMenus2()
 {	
+	// Create the menu for selecting the number of disks
 	int menu = glutCreateMenu(processMenuNumDisks);
 	glutAddMenuEntry("3",3);
 	glutAddMenuEntry("4",4);
@@ -402,22 +464,28 @@ void createGLUTMenus2()
 	glutAddMenuEntry("9",9);
 	glutAddMenuEntry("10",10);
 	
+	// Create the menu for the exit option
 	int menuExit = glutCreateMenu(processMenuExit);
 	glutAddMenuEntry("Yes",0);
 	glutAddMenuEntry("No",1);
 	
+	// Create the menu for the restart option
 	int menuRestart = glutCreateMenu(processMenuRestart);
 	glutAddMenuEntry("Yes",0);
 	glutAddMenuEntry("No",1);
 	
+	// Create the menu for the solve completely option
 	int menuSolveCompletely = glutCreateMenu(processMenuSolveCompletely);
 	glutAddMenuEntry("Start",0);
 	
+	// Create the main menu
 	glutCreateMenu(processMenuMain2);
 	glutAddSubMenu("Number of Disks",menu);
 	glutAddSubMenu("Solve Completely",menuSolveCompletely);
 	glutAddSubMenu("Restart",menuRestart);
 	glutAddSubMenu("Exit",menuExit);
+	
+	// Attach the menu to the right mouse button
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
