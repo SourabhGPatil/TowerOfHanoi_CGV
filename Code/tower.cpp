@@ -450,6 +450,19 @@ void processMenuSolveCompletely(int option)
 	animationFlag=temp;
 }
 
+// Function to handle the number of disks menu option
+void processMenuNumDisks(int option)
+{
+	// Update the number of disks based on the selected option
+	NUM_DISKS = option;
+	
+	// Restart the game with the new number of disks
+	restart();
+	
+	// Request to redraw the display
+	glutPostRedisplay();
+}
+
 // Function to create GLUT menus for the game
 void createGLUTMenus2()
 {	
@@ -489,16 +502,36 @@ void createGLUTMenus2()
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
-int main(int argc,char** argv)
+// Main function of the program
+int main(int argc, char** argv)
 {
-	glutInit(&argc,argv);
-	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
-	glutInitWindowSize(1024,800);
-	glutInitWindowPosition(100,100);
+	// Initialize GLUT library and pass command line arguments
+	glutInit(&argc, argv);
+	
+	// Set the display mode for GLUT window
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	
+	// Set the initial window size
+	glutInitWindowSize(1024, 800);
+	
+	// Set the initial window position
+	glutInitWindowPosition(100, 100);
+	
+	// Create a window with the specified title
 	glutCreateWindow("Tower of Hanoi");
+	
+	// Perform initialization tasks
 	init();
+	
+	// Specify the function to be called for rendering/displaying the graphics
 	glutDisplayFunc(display);
+	
+	// Create the custom menus using GLUT
 	createGLUTMenus2();
+	
+	// Enter the GLUT event processing loop
 	glutMainLoop();
+	
+	// Program execution completed successfully
 	return 0;
 }
