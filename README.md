@@ -36,7 +36,7 @@ Three rods and n discs make up the Tower of Hanoi, a mathematical puzzle. The ai
 3. Now execute the program using the command `./a.out tower.cpp`
 
 
-## Output Screenshots
+## Output
 ![TowerOfHanoi_1](https://user-images.githubusercontent.com/81312909/231516270-ed5b4f75-e258-47f5-a6fc-14bdb0fa2cb4.png)
 ------------
 ![TowerOfHanoi_2](https://user-images.githubusercontent.com/81312909/231516379-2e570103-b3ad-47de-9a30-4390b79d7b07.png)
