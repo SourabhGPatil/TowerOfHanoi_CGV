@@ -1,7 +1,7 @@
 # SIMULATION OF TOWER OF HANOI PROBLEM USING OPENGL API
 ------------
 
-> This project was done as a part of the **Computer Graphics and Visualization** subject.
+> This project was done as part of the **Computer Graphics and Visualization** subject.
 
 ------------
 ## Introduction
